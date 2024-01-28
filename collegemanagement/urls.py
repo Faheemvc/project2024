@@ -17,12 +17,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from .views import DashboardView
 
 app_name=''
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.adminclick_view,name=''),
+    path("", DashboardView.as_view(), name="dashboard"),
 
 
     path('aboutus',views.about_view),
@@ -35,6 +37,7 @@ urlpatterns = [
     path('signup',views.student_signup,name='signup'),
     path('signin',views.student_signin,name='signin'),
 
-   
+    path('',include("event.urls")),
+    path('accounts',include("accounts.urls")),
 
 ]

@@ -71,7 +71,7 @@
                   
                   <div>
                     <button class="shadow-sm box m mt-5 rounded "><img src="{% static 'sources/person-check.svg' %}" alt=""><h6>Verify</h3></button>
-                    <button class="shadow-sm box m mt-5 rounded "><img src="{% static 'sources/calendar-check.svg' %}" alt=""><h6>Event</h3></button>
+                    <button class="shadow-sm box m mt-5 rounded " id="eventBtn" ><img src="{% static 'sources/calendar-check.svg' %}" alt=""><h6>Event</h3></button>
                     <button class="shadow-sm box m mt-5 rounded "><img src="{% static 'sources/person-lines-fill.svg' %}" alt=""><h6>Student</h6></button>
                     <button class="shadow-sm box m mt-5 rounded "><img src="{% static 'sources/file-earmark-fill.svg' %}" alt=""><h6>Open</h6></button>
                     <button class="shadow-sm box m mt-5 rounded "><img src="{% static 'sources/kanban.svg' %}" alt=""><h6>Reports</h6></button>
@@ -79,6 +79,13 @@
                   </div>
         </div>
     </div>
+    
+    <script>
+      let event = document.getElementById("eventBtn")
+      event.addEventListener('click',() => {
+        window.location.href = 'http://127.0.0.1:8000/calender'
+      })
+    </script>
     {%endblock content%}
 </body>
 

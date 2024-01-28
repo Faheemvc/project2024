@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from . import models
+
+from event import urls
+
 # from django.http import HttpResponse
 # Create your views here.
 def home_view(request):
@@ -17,7 +20,8 @@ def contact_view(request):
 def adminclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect
-    return render(request,'mainlink/adminclick.html')
+    
+    return render(request,'mainlink/adminclick.html',{'event': 'calendar' })
 def staffclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect
