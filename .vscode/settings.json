@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 500,
+            "driver": "SQLite",
+            "database": "C:\\Users\\fahee\\OneDrive\\Desktop\\abhaysafi\\eventmanagement-master\\db.sqlite3",
+            "name": "collegemanagement"
+        }
+    ]
+}

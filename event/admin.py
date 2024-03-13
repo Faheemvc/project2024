@@ -1,25 +1,25 @@
 from django.contrib import admin
-from event import models
+from .models import staff,student,EventDetails,studentDischargeDetails
+# Register your models here.
 
 
-@admin.register(models.Event)
-class EventAdmin(admin.ModelAdmin):
-    model = models.Event
-    list_display = [
-        "id",
-        "title",
-        "user",
-        "is_active",
-        "is_deleted",
-        "created_at",
-        "updated_at",
-    ]
-    list_filter = ["is_active", "is_deleted"]
-    search_fields = ["title"]
+
+class staffAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(staff, staffAdmin)
+
+class studentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(student, studentAdmin)
+
+class AppointmentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(EventDetails, AppointmentAdmin)
+
+class studentDischargeDetailsAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(studentDischargeDetails, studentDischargeDetailsAdmin)
 
 
-@admin.register(models.EventMember)
-class EventMemberAdmin(admin.ModelAdmin):
-    model = models.EventMember
-    list_display = ["id", "event", "user", "created_at", "updated_at"]
-    list_filter = ["event"]
+
+

@@ -2,4 +2,7 @@ from django.apps import AppConfig
 
 
 class EventConfig(AppConfig):
-    name = "event"
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'event'
+    def ready(self):
+        import event.signals

@@ -20,7 +20,7 @@ Event Details
         <hr>
         <div class="clearfix">
             <h4 class="left" > Members of this Event</h4>
-            <a class="btn btn-success right" href="{% url 'event:add_eventmember' event.id %}"> Add Member </a>
+            <a class="btn btn-success right" href="{% url 'eventCalendar:add_eventmember' event.id %}"> Add Member </a>
         </div>
         <table class="table table-bordered">
             <thead>
@@ -40,7 +40,7 @@ Event Details
                     <td>{{ member.user.username }}</td>
                     <td>{{ member.user.email }}</td>
                     <td>
-                        <a class="btn btn-danger" href="{% url 'event:remove_event' member.id %}">Remove</a>
+                        <a class="btn btn-danger" href="{% url 'eventCalendar:remove_event' member.id %}">Remove</a>
                     </td>
                 </tr>
                 {% endfor %}
