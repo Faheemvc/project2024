@@ -160,8 +160,8 @@ def admin_dashboard_view(request):
     studentcount=models.student.objects.all().filter(status=True).count()
     pendingstudentcount=models.student.objects.all().filter(status=False).count()
 
-    appointmentcount=models.Appointment.objects.all().filter(status=True).count()
-    pendingappointmentcount=models.Appointment.objects.all().filter(status=False).count()
+    appointmentcount=models.EventDetails.objects.all().filter(status=True).count()
+    pendingappointmentcount=models.EventDetails.objects.all().filter(status=False).count()
     mydict={
     'staffs':staffs,
     'students':students,
@@ -511,7 +511,7 @@ def admin_appointment_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_view_appointment_view(request):
-    appointments=models.Appointment.objects.all().filter(status=True)
+    appointments=models.EventDetails.objects.all().filter(status=True)
     return render(request,'college/admin_view_appointment.html',{'appointments':appointments})
 
 
@@ -519,10 +519,10 @@ def admin_view_appointment_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_appointment_view(request):
-    appointmentForm=forms.AppointmentForm()
+    appointmentForm=forms.EventForm()
     mydict={'appointmentForm':appointmentForm,}
     if request.method=='POST':
-        appointmentForm=forms.AppointmentForm(request.POST)
+        appointmentForm=forms.EventForm(request.POST)
         if appointmentForm.is_valid():
             appointment=appointmentForm.save(commit=False)
             appointment.staffId=request.POST.get('staffId')
@@ -540,7 +540,7 @@ def admin_add_appointment_view(request):
 @user_passes_test(is_admin)
 def admin_approve_appointment_view(request):
     #those whose approval are needed
-    appointments=models.Appointment.objects.all().filter(status=False)
+    appointments=models.EventDetails.objects.all().filter(status=False)
     return render(request,'college/admin_approve_appointment.html',{'appointments':appointments})
 
 
@@ -548,7 +548,7 @@ def admin_approve_appointment_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def approve_appointment_view(request,pk):
-    appointment=models.Appointment.objects.get(id=pk)
+    appointment=models.EventDetails.objects.get(id=pk)
     appointment.status=True
     appointment.save()
     return redirect(reverse('admin-approve-appointment'))
@@ -558,7 +558,7 @@ def approve_appointment_view(request,pk):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def reject_appointment_view(request,pk):
-    appointment=models.Appointment.objects.get(id=pk)
+    appointment=models.EventDetails.objects.get(id=pk)
     appointment.delete()
     return redirect('admin-approve-appointment')
 #---------------------------------------------------------------------------------
@@ -578,11 +578,11 @@ def reject_appointment_view(request,pk):
 def staff_dashboard_view(request):
     #for three cards
     studentcount=models.student.objects.all().filter(status=True,assignedstaffId=request.user.id).count()
-    appointmentcount=models.Appointment.objects.all().filter(status=True,staffId=request.user.id).count()
+    appointmentcount=models.EventDetails.objects.all().filter(status=True,staffId=request.user.id).count()
     studentdischarged=models.studentDischargeDetails.objects.all().distinct().filter(assignedstaffName=request.user.first_name).count()
 
     #for  table in staff dashboard
-    appointments=models.Appointment.objects.all().filter(status=True,staffId=request.user.id).order_by('-id')
+    appointments=models.EventDetails.objects.all().filter(status=True,staffId=request.user.id).order_by('-id')
     studentid=[]
     for a in appointments:
         studentid.append(a.studentId)
@@ -651,7 +651,7 @@ def staff_appointment_view(request):
 @user_passes_test(is_staff)
 def staff_view_appointment_view(request):
     staff=models.staff.objects.get(user_id=request.user.id) #for profile picture of staff in sidebar
-    appointments=models.Appointment.objects.all().filter(status=True,staffId=request.user.id)
+    appointments=models.EventDetails.objects.all().filter(status=True,staffId=request.user.id)
     studentid=[]
     for a in appointments:
         studentid.append(a.studentId)
@@ -665,7 +665,7 @@ def staff_view_appointment_view(request):
 @user_passes_test(is_staff)
 def staff_delete_appointment_view(request):
     staff=models.staff.objects.get(user_id=request.user.id) #for profile picture of staff in sidebar
-    appointments=models.Appointment.objects.all().filter(status=True,staffId=request.user.id)
+    appointments=models.EventDetails.objects.all().filter(status=True,staffId=request.user.id)
     studentid=[]
     for a in appointments:
         studentid.append(a.studentId)
@@ -678,10 +678,10 @@ def staff_delete_appointment_view(request):
 @login_required(login_url='stafflogin')
 @user_passes_test(is_staff)
 def delete_appointment_view(request,pk):
-    appointment=models.Appointment.objects.get(id=pk)
+    appointment=models.EventDetails.objects.get(id=pk)
     appointment.delete()
     staff=models.staff.objects.get(user_id=request.user.id) #for profile picture of staff in sidebar
-    appointments=models.Appointment.objects.all().filter(status=True,staffId=request.user.id)
+    appointments=models.EventDetails.objects.all().filter(status=True,staffId=request.user.id)
     studentid=[]
     for a in appointments:
         studentid.append(a.studentId)
@@ -732,12 +732,12 @@ def student_appointment_view(request):
 @login_required(login_url='studentlogin')
 @user_passes_test(is_student)
 def student_book_appointment_view(request):
-    appointmentForm=forms.studentAppointmentForm()
+    appointmentForm=forms.StudentEventForm()
     student=models.student.objects.get(user_id=request.user.id) #for profile picture of student in sidebar
     message=None
     mydict={'appointmentForm':appointmentForm,'student':student,'message':message}
     if request.method=='POST':
-        appointmentForm=forms.studentAppointmentForm(request.POST)
+        appointmentForm=forms.StudentEventForm(request.POST)
         if appointmentForm.is_valid():
             print(request.POST.get('staffId'))
             desc=request.POST.get('description')
@@ -778,7 +778,7 @@ def search_staff_view(request):
 @user_passes_test(is_student)
 def student_view_appointment_view(request):
     student=models.student.objects.get(user_id=request.user.id) #for profile picture of student in sidebar
-    appointments=models.Appointment.objects.all().filter(studentId=request.user.id)
+    appointments=models.EventDetails.objects.all().filter(studentId=request.user.id)
     return render(request,'college/student_view_appointment.html',{'appointments':appointments,'student':student})
 
 
@@ -890,7 +890,7 @@ def p_admin_appointment_view(request):
 
 
 def p_admin_view_appointment_view(request):
-    appointments = models.Appointment.objects.all().filter(status=True, status2=True)
+    appointments = models.EventDetails.objects.all().filter(status=True, status2=True)
 
     return render(request,'prin/admin_view_appointment.html',{'appointments':appointments})
 
@@ -916,14 +916,14 @@ def p_admin_add_appointment_view(request):
 
 def p_admin_approve_appointment_view(request):
     #those whose approval are needed
-    appointments = models.Appointment.objects.all().filter(status=True, status2=False)
+    appointments = models.EventDetails.objects.all().filter(status=True, status2=False)
 
     return render(request,'prin/admin_approve_appointment.html',{'appointments':appointments})
 
 
 
 def p_approve_appointment_view(request,pk):
-    appointment=models.Appointment.objects.get(id=pk)
+    appointment=models.EventDetails.objects.get(id=pk)
     appointment.status2=True
     appointment.save()
     return redirect(reverse('prin-view-appointment'))
@@ -931,7 +931,7 @@ def p_approve_appointment_view(request,pk):
 
 
 def p_reject_appointment_view(request,pk):
-    appointment=models.Appointment.objects.get(id=pk)
+    appointment=models.EventDetails.objects.get(id=pk)
     appointment.delete()
     return redirect('prin-view-appointment')
 
