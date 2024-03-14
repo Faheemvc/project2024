@@ -1,0 +1,9 @@
+git init
+
+git add -A
+
+git commit -m "Initial commit"  # Replace the message with your own description
+
+git remote add origin git@github.com:yourusername/your-repo-name.git
+
+git push -u origin main  # Use `-f` option to force the push if necessary
